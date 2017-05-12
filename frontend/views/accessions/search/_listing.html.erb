@@ -19,7 +19,13 @@
       donor = result_json["linked_agents"][0] ? result_json["linked_agents"][0]["_resolved"] : nil
       if donor
         donor_name = donor["title"]
-        donor_number = donor["donor_details"][0]["donor_number"]
+        donor_number = donor["donor_details"][0] ? donor["donor_details"][0]["donor_number"] : "No Donor Number"
+      end
+
+      collection_management = result_json["collection_management"] ? result_json["collection_management"] : nil
+      if collection_management
+        processing_status = collection_management["processing_status"] ? collection_management["processing_status"] : nil
+        processing_priority = collection_management["processing_priority"] ? collection_management["processing_priority"] : nil
       end
 
       content_date = result_json["dates"][0] ? result_json["dates"][0]["expression"] : nil
@@ -40,6 +46,14 @@
         <% end %>
         <p>Accession Date: <%= result_json["accession_date"] %></p>
         <p>Description: <%= clean_mixed_content("#{content_description}").html_safe %></p>
+        <% if collection_management %>
+          <% if processing_status %>
+            <p>Processing Status: <%= "#{processing_status}" %></p>
+          <% end %>
+          <% if processing_priority %>
+            <p>Processing Priority: <%= "#{processing_priority}" %></p>
+          <% end %>
+        <% end %>
         <% if donor %>
           <p>Donor: <%= "#{donor_name} (#{donor_number})" %></p>
         <% end %>
