@@ -9,6 +9,8 @@
     <% @search_data['results'].each_with_index do |result, index|
       result_json = JSON.parse(result["json"])
 
+      accession_id = result_json["id_0"]
+
       extent_statements = []
       result_json["extents"].each do |extent|
         extent_number = extent["number"]
@@ -28,6 +30,12 @@
         processing_priority = collection_management["processing_priority"] ? collection_management["processing_priority"] : nil
       end
 
+      classifications = []
+      result_json["classifications"].each do |classification|
+        classification_name = classification["_resolved"]["identifier"]
+        classifications << classification_name
+      end
+
       content_date = result_json["dates"][0] ? result_json["dates"][0]["expression"] : nil
       content_description = result_json["content_description"] ? result_json["content_description"] : nil
      %>
@@ -37,7 +45,7 @@
         <div><span>Accession</span></div>
       </div>
       <div class="panel-body">
-        <p>Title: <%=  clean_mixed_content(result["title"]).html_safe || clean_mixed_content(result['display_string']).html_safe %></p>
+        <p>Accession ID: <%= accession_id %></p>
         <% if content_date %>
           <p>Date: <%= content_date %></p>
         <% end %>
@@ -53,6 +61,9 @@
           <% if processing_priority %>
             <p>Processing Priority: <%= "#{processing_priority}" %></p>
           <% end %>
+        <% end %>
+        <% if classifications.length > 0 %>
+          <p>Classification: <%= classifications.join(", ") %></p>
         <% end %>
         <% if donor %>
           <p>Donor: <%= "#{donor_name} (#{donor_number})" %></p>
