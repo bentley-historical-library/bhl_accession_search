@@ -1,0 +1,7 @@
+en:
+  search_results:
+    filter:
+      classification_identifiers_u_sstr: Classification
+      collection_management_processing_priority_u_ustr: Processing Priority
+      collection_management_processing_status_u_ustr: Processing Status
+      sources_u_sstr: Source
