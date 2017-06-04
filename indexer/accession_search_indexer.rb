@@ -11,16 +11,16 @@ class CommonIndexer
         end
 
         classification_identifiers = []
-        if record['record']['enum_1_enum_s']
-          classification_identifiers.concat(record['record']['enum_1_enum_s'])
+        if doc['enum_1_enum_s']
+          classification_identifiers.concat(doc['enum_1_enum_s'])
         end
-        if record['record']['enum_2_enum_s']
-          classification_identifiers.concat(record['record']['enum_2_enum_s'])
+        if doc['enum_2_enum_s']
+          classification_identifiers.concat(doc['enum_2_enum_s'])
         end
-        if record['record']['enum_3_enum_s']
-          classification_identifiers.concat(record['record']['enum_3_enum_s'])
+        if doc['enum_3_enum_s']
+          classification_identifiers.concat(doc['enum_3_enum_s'])
         end
-        doc['classification_identifiers_u_sstr'] = classification_identifiers if not classification_identifiers.empty?
+        doc['classification_identifiers_u_sstr'] = classification_identifiers
       end
     }
   end

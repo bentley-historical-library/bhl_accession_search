@@ -30,11 +30,16 @@
         processing_priority = collection_management["processing_priority"] ? collection_management["processing_priority"] : nil
       end
 
-      classifications = []
-      result_json["classifications"].each do |classification|
-        classification_name = classification["_resolved"]["identifier"]
-        classifications << classification_name
+      if result["classification_identifiers_u_sstr"]
+        classifications = result["classification_identifiers_u_sstr"]
+      else
+        classifications = []
       end
+
+      #result_json["classifications"].each do |classification|
+        #classification_name = classification["_resolved"]["identifier"]
+        #classifications << classification_name
+      #end
 
       content_date = result_json["dates"][0] ? result_json["dates"][0]["expression"] : nil
       content_description = result_json["content_description"] ? result_json["content_description"] : nil
