@@ -36,12 +36,6 @@
         classifications = []
       end
 
-      #result_json["classifications"].each do |classification|
-        #classification_name = classification["_resolved"]["identifier"]
-        #classifications << classification_name
-      #end
-
-      content_date = result_json["dates"][0] ? result_json["dates"][0]["expression"] : nil
       content_description = result_json["content_description"] ? result_json["content_description"] : nil
      %>
 
@@ -51,13 +45,10 @@
       </div>
       <div class="panel-body">
         <p>Accession ID: <%= accession_id %></p>
-        <% if content_date %>
-          <p>Date: <%= content_date %></p>
-        <% end %>
+        <p>Accession Date: <%= result_json["accession_date"] %></p>
         <% if extent_statements.length > 0 %>
           <p>Extent: <%= extent_statements.join(", ") %></p>
-        <% end %>
-        <p>Accession Date: <%= result_json["accession_date"] %></p>
+        <% end %>        
         <p>Description: <%= clean_mixed_content("#{content_description}").html_safe %></p>
         <% if collection_management %>
           <% if processing_status %>
@@ -71,14 +62,14 @@
           <p>Classification: <%= classifications.join(", ") %></p>
         <% end %>
         <% if donor %>
-          <p>Donor: <%= "#{donor_name} (#{donor_number})" %></p>
+          <p>Donor: <%= "#{donor_name} (#{donor_number})" %> <%= link_to "[view all from donor]", build_search_params({"add_filter_term" => {"sources_u_sstr" => donor_name}.to_json}) %></p>
         <% end %>
         <%= link_to I18n.t("actions.view"), {:controller => :resolver, :action => :resolve_readonly, :uri => result["id"]}, :class => "btn btn-block btn-primary" %>
         <% if can_edit_search_result?(result) %>
           <%= link_to I18n.t("actions.edit"), {:controller => :resolver, :action => :resolve_edit, :uri => result["id"]}, :class => "btn btn-block btn-info" %>
         <% end %>
       </div>
-      <div class="panel-footer">
+      <!--<div class="panel-footer">
         <div class="row collapsed" data-toggle="collapse" href="#search_result_<%= index %>">
           <div class="col-md-7">View Result JSON</div>
         </div>
@@ -86,7 +77,7 @@
           <%= result %>
         </div>
       </div>
-    </div>
+    </div>-->
 
     <% end %>
   </div>
