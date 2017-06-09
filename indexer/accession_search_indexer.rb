@@ -10,9 +10,17 @@ class CommonIndexer
           doc['collection_management_processing_status_u_ustr'] = record['record']['collection_management']['processing_status']
         end
 
-        if record['record']['classifications']
-          doc['classification_identifiers_u_sstr'] = record['record']['classifications'].map { |c| ASUtils.to_json(c['_resolved']['path_from_root']['identifier']) }
+        classification_identifiers = []
+        if doc['enum_1_enum_s']
+          classification_identifiers.concat(doc['enum_1_enum_s'])
         end
+        if doc['enum_2_enum_s']
+          classification_identifiers.concat(doc['enum_2_enum_s'])
+        end
+        if doc['enum_3_enum_s']
+          classification_identifiers.concat(doc['enum_3_enum_s'])
+        end
+        doc['classification_identifiers_u_sstr'] = classification_identifiers
       end
     }
   end
