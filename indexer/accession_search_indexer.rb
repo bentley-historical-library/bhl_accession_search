@@ -21,7 +21,7 @@ class CommonIndexer
           classification_identifiers.concat(doc['enum_3_enum_s'])
         end
         doc['classification_identifiers_u_sstr'] = classification_identifiers
-        doc['baseline_u_sbool'] = record['record']['_resolved']['boolean_2']
+        doc['baseline_u_sbool'] = record['record']['user_defined']['boolean_2']
       end
     }
   end
