@@ -26,5 +26,5 @@ class IndexerCommon
       end
     }
   end
-  
+
 end
