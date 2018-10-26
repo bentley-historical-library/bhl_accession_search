@@ -69,6 +69,8 @@
           <%= link_to I18n.t("actions.edit"), {:controller => :resolver, :action => :resolve_edit, :uri => result["id"]}, :class => "btn btn-block btn-info" %>
         <% end %>
       </div>
+
+      <!-- Uncomment the footer below to toggle the full ArchivesSpace search result JSON for each accession. Useful for debugging or adding new fields. -->
       <!--<div class="panel-footer">
         <div class="row collapsed" data-toggle="collapse" href="#search_result_<%= index %>">
           <div class="col-md-7">View Result JSON</div>
@@ -77,6 +79,7 @@
           <%= result %>
         </div>
       </div>-->
+
     </div>
 
     <% end %>
