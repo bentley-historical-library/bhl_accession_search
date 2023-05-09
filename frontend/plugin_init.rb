@@ -11,9 +11,21 @@ Rails.application.config.after_initialize do
         alias_method :render_aspace_partial_pre_bhl_accession_search, :render_aspace_partial
         def render_aspace_partial(args)
             if args[:partial] == "search/listing"
-                # Replace the default ArchivesSpace search listing for the accession listing
+                # Apply custom accession columns
                 if controller.controller_name == 'accessions' && controller.action_name == 'index'
-                    args[:partial] = "accessions/search/listing"
+                    action_column = @columns.pop if @columns.last.class.include?('actions')
+
+                    @columns = []
+
+                    add_multiselect_column if can_delete_search_results?('accession')
+
+                    add_column("Accession Details",
+                               { :sortable => false },
+                               proc {|result|
+                                   render_aspace_partial(partial: "accessions/search/details.html.erb", locals: {result: result})
+                               })
+
+                    @columns << action_column
                 end
             end
 
