@@ -19,10 +19,73 @@ Rails.application.config.after_initialize do
 
                     add_multiselect_column if can_delete_search_results?('accession')
 
-                    add_column("Accession Details",
+                    add_column("ID",
                                { :sortable => false },
                                proc {|result|
-                                   render_aspace_partial(partial: "accessions/search/details.html.erb", locals: {result: result})
+                                   result["_parsed_json"] ||= JSON.parse(result["json"])
+                                   result["_parsed_json"]["id_0"]
+                               })
+
+                    add_column("Date",
+                               { :sortable => false },
+                               proc {|result|
+                                   result["_parsed_json"] ||= JSON.parse(result["json"])
+                                   result["_parsed_json"]["accession_date"]
+                               })
+
+                    add_column("Extent",
+                               { :sortable => false },
+                               proc {|result|
+                                   result["_parsed_json"] ||= JSON.parse(result["json"])
+                                   extent_statements = []
+                                   result["_parsed_json"]["extents"].each do |extent|
+                                       extent_number = extent["number"]
+                                       extent_type = I18n.t('enumerations.extent_extent_type.' + extent["extent_type"], :default => extent["extent_type"])
+                                       extent_statements << "#{extent_number} #{extent_type}"
+                                   end
+                                   extent_statements.join(", ")
+                               })
+
+
+                    add_column("Description",
+                               { :sortable => false },
+                               proc {|result|
+                                   result["_parsed_json"] ||= JSON.parse(result["json"])
+                                   clean_mixed_content(result["_parsed_json"]["content_description"].to_s).html_safe
+                               })
+
+
+                    add_column("Processing Info",
+                               { :sortable => false },
+                               proc {|result|
+                                   result["_parsed_json"] ||= JSON.parse(result["json"])
+                                   collection_management = result["_parsed_json"]["collection_management"] ? result["_parsed_json"]["collection_management"] : nil
+                                   if collection_management
+                                       out = ""
+                                       out += "<div>Status: #{I18n.t("enumerations.collection_management_processing_status.#{collection_management["processing_status"]}", default: collection_management["processing_status"])}</div>" if collection_management["processing_status"]
+                                       out += "<div>Priority: #{I18n.t("enumerations.collection_management_processing_priority.#{collection_management["processing_priority"]}", default: collection_management["processing_priority"])}</div>" if collection_management["processing_priority"]
+                                       out.html_safe
+                                   end
+                               })
+
+
+                    add_column("Classification",
+                               { :sortable => false },
+                               proc {|result|
+                                   ASUtils.wrap(result["classification_identifiers_u_sstr"]).join(", ")
+                               })
+
+
+                    add_column("Donor",
+                               { :sortable => false },
+                               proc {|result|
+                                   result["_parsed_json"] ||= JSON.parse(result["json"])
+                                   donor = result["_parsed_json"]["linked_agents"][0] ? result["_parsed_json"]["linked_agents"][0]["_resolved"] : nil
+                                   if donor
+                                       donor_name = donor["title"]
+                                       donor_number = donor["donor_details"][0] ? donor["donor_details"][0]["donor_number"] : "No Donor Number"
+                                       "#{donor_name} (#{donor_number})<br>#{link_to "[view all from donor]", build_search_params({"add_filter_term" => {"sources_u_sstr" => donor_name}.to_json}) }".html_safe
+                                   end
                                })
 
                     @columns << action_column
