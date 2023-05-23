@@ -1,6 +1,6 @@
 en:
-  search_results:
-    filter:
+  search:
+    accession:
       baseline_u_sbool: Baseline Candidate
       classification_identifiers_u_sstr: Classification
       collection_management_processing_priority_u_ustr: Processing Priority
