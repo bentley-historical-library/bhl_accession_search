@@ -14,7 +14,8 @@ Rails.application.config.after_initialize do
                 # Apply custom accession columns
                 if controller.controller_name == 'accessions' && controller.action_name == 'index'
                     add_columns
-					action_column = @columns.pop if @columns.last.class.include?('actions')
+
+                    action_column = @columns.pop if @columns.last.class.include?('actions')
 
                     @columns = []
 
