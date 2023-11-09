@@ -13,7 +13,8 @@ Rails.application.config.after_initialize do
             if args[:partial] == "search/listing"
                 # Apply custom accession columns
                 if controller.controller_name == 'accessions' && controller.action_name == 'index'
-                    action_column = @columns.pop if @columns.last.class.include?('actions')
+                    add_columns
+					action_column = @columns.pop if @columns.last.class.include?('actions')
 
                     @columns = []
 
